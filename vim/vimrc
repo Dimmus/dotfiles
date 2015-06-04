@@ -1,0 +1,223 @@
+" Use 256 colors in vim
+" some plugins not work without it
+set t_Co=256
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'jszakmeister/vim-togglecursor'
+Plugin 'bling/vim-airline'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-repeat'
+Plugin 'honza/vim-snippets'
+Plugin 'Shougo/unite.vim'
+Plugin 'chriskempson/base16-vim'
+
+call vundle#end()            " required
+
+filetype plugin indent on    " required
+
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"
+
+syntax on
+
+" Base16 theme
+" --------------------------
+set background=dark
+let base16colorspace=256
+
+let g:base16_shell_path="/home/dimmus/.config/base16-shell"
+if !has('gui_running')
+    execute "silent !/bin/sh /home/dimmus/.config/base16-shell/base16-default.dark.sh"
+endif
+
+
+colorscheme base16-default
+
+
+
+" Airline
+" ---------------------------
+set laststatus=2
+
+" Colorscheme for airline
+let g:airline_theme='understated'
+" Set custom left separator
+let g:airline_left_sep = '▶'
+" Set custom right separator
+let g:airline_right_sep = '◀'
+" Enable airline for tab-bar
+let g:airline#extensions#tabline#enabled = 1
+" Don't display buffers in tab-bar with single tab
+let g:airline#extensions#tabline#show_buffers = 0
+" Display only filename in tab
+" let g:airline#extensions#tabline#fnamemod = ':t'
+" Don't display encoding
+" let g:airline_section_y = ''
+" Don't display filetype
+" let g:airline_section_x = ''
+
+
+" Syntastic
+"-----------------------------
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Auto reload changed files
+set autoread
+" Always change current dirrectory to current-editing-file dir
+"set autochdir
+" Indicates fast terminal connection
+set ttyfast
+" Set character encoding to use in vim
+set encoding=utf-8
+" Let vim know what encoding we use in our terminal
+set termencoding=utf-8
+
+" Hide showmode
+" Showmode is useless with airline
+set noshowmode
+" Show file name in window title
+set title
+" Mute error bell
+set novisualbell
+" Remove all useless messages like intro screen and use abbreviation like RO
+" instead readonly and + instead modified
+set shortmess=atI
+" Enable display whitespace characters
+set list
+" Setting up how to display whitespace characters
+set listchars=tab:⇥\ ,trail:·,extends:⋯,precedes:⋯,nbsp:~
+" Wrap line only on characters in breakat list like ^I!@*-+;:,./?
+" Useless with nowrap
+" set linebreak
+" Numbers of line to scroll when the cursor get off the screen
+" Useless with scrolloff
+" set scrolljump=5
+" Numbers of columns to scroll when the cursor get off the screen
+" Useless with sidescrollof
+" set sidescroll=4
+" Numbers of rows to keep to the left and to the right off the screen
+set scrolloff=10
+" Numbers of columns to keep to the left and to the right off the screen
+set sidescrolloff=10
+" Vim will move to the previous/next line after reaching first/last char in
+" the line with this commnad (you can add 'h' or 'l' here as well)
+" <,> stand for arrows in command mode and [,] arrows in visual mode
+set whichwrap=b,s,<,>,[,],
+" Display command which you typing and other command related stuff
+set showcmd
+
+" The cursor should stay where you leave it, instead of moving to the first non
+" blank of the line
+set nostartofline
+" Disable wrapping long string
+set nowrap
+" Display Line numbers
+set number
+" Highlight line with cursor
+set cursorline
+" maximum text length at 80 symbols, vim automatically breaks longer lines
+" set textwidth=80
+" higlight column right after max textwidth
+set colorcolumn=+1
+
+
+
+"--------------------------------------------------
+" Tab options
+" Copy indent from previous line
+set autoindent
+" Enable smart indent. it add additional indents whe necessary
+set smartindent
+" Replace tabs with spaces
+set expandtab
+" Whe you hit tab at start of line, indent added according to shiftwidth value
+set smarttab
+" number of spaces to use for each step of indent
+set shiftwidth=4
+" Number of spaces that a Tab in the file counts for
+set tabstop=4
+" Same but for editing operation (not shure what exactly does it means)
+" but in most cases tabstop and softtabstop better be the same
+set softtabstop=4
+" Round indent to multiple of 'shiftwidth'.
+" Indentation always be multiple of shiftwidth
+" Applies to < and > command
+set shiftround
+"--------------------------------------------------
+" Search options
+" Add the g flag to search/replace by default
+set gdefault
+" Highlight search results
+set hlsearch
+" Ignore case in search patterns
+set ignorecase
+" Override the 'ignorecase' option if the search patter ncontains upper case characters
+set smartcase
+" Live search. While typing a search command, show where the pattern
+set incsearch
+" Disable higlighting search result on Enter key
+nnoremap <silent> <cr> :nohlsearch<cr><cr>
+" Show matching brackets
+set showmatch
+" Make < and > match as well
+set matchpairs+=<:>
+"--------------------------------------------------
+" Wildmenu
+" Extended autocmpletion for commands
+set wildmenu
+" Autocmpletion hotkey
+set wildcharm=<TAB>
+"--------------------------------------------------
+" Folding
+" Enable syntax folding in javascript
+let javaScript_fold=1
+" No fold closed at open file
+set foldlevelstart=99
+set nofoldenable
+" Keymap to toggle folds with space
+nmap <space> za
+"--------------------------------------------------
+" Edit
+" Allow backspace to remove indents, newlines and old text
+set backspace=indent,eol,start
+" toggle paste mode on \p
+set pastetoggle=<leader>p
+" Add '-' as recognized word symbol. e.g dw delete all 'foo-bar' instead just 'foo'
+set iskeyword+=-
+" Disable backups file
+set nobackup
+" Disable vim common sequense for saving.
+" By defalut vim write buffer to a new file, then delete original file
+" then rename the new file.
+set nowritebackup
+" Disable swp files
+set noswapfile
+" Do not add eol at the end of file.
+set noeol

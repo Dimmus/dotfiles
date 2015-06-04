@@ -1,0 +1,114 @@
+" Use 256 colors in vim
+" some plugins not work without it
+set t_Co=256
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'jszakmeister/vim-togglecursor'
+Plugin 'bling/vim-airline'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-repeat'
+Plugin 'honza/vim-snippets'
+Plugin 'Shougo/unite.vim'
+Plugin 'chriskempson/base16-vim'
+
+call vundle#end()            " required
+
+filetype plugin indent on    " required
+
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"
+
+syntax on
+
+
+" Base16 theme
+set background=dark
+let base16colorspace=256
+colorscheme base16-default
+
+
+" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+set laststatus=2
+
+
+" Unite
+" Set unite window height
+let g:unite_winheight = 10
+" Start unite in insert mode by default
+let g:unite_enable_start_insert = 1
+" Display unite on the bottom (or bottom right) part of the screen
+let g:unite_split_rule = 'botright'
+" Set short limit for max most recent files count.
+" It less unrelative recent files this way
+let g:unite_source_file_mru_limit = 100
+" Enable history for yanks
+let g:unite_source_history_yank_enable = 1
+" Make samll limit for yank history,
+let g:unite_source_history_yank_limit = 40
+" Grep options Default for unite + supress error messages
+let g:unite_source_grep_default_opts = '-iRHns'
+let g:unite_source_rec_max_cache_files = 99999
+" If ack exists use it instead of grep
+if executable('ack-grep')
+" Use ack-grep
+let g:unite_source_grep_command = 'ack-grep'
+" Set up ack options
+let g:unite_source_grep_default_opts = '--no-heading --no-color -a -H'
+let g:unite_source_grep_recursive_opt = ''
+endif
+" Hotkey for open window with most recent files
+nnoremap <silent><leader>m :<C-u>Unite file_mru <CR>
+" Hotkey for open history window
+nnoremap <silent><leader>h :Unite -quick-match -max-multi-lines=2 -start-insert -auto-quit history/yank<CR>
+" Quick tab navigation
+nnoremap <silent><leader>' :Unite -quick-match -auto-quit tab<CR>
+" Fuzzy find files
+nnoremap <silent><leader>; :Unite file_rec/async:! -buffer-name=files -start-insert<CR>
+" Unite-grep
+nnoremap <silent><leader>/ :Unite grep:. -no-start-insert -no-quit -keep-focus -wrap<CR>
+"-------------------------
+" NERDTree
+" Tell NERDTree to display hidden files on startup
+let NERDTreeShowHidden=1
+" Disable bookmarks label, and hint about '?'
+let NERDTreeMinimalUI=1
+" Display current file in the NERDTree ont the left
+nmap <silent> <leader>f :NERDTreeFind<CR>
+"-------------------------
+" Syntastic
+function! s:FindSyntasticExecPath(toolName)
+if executable(a:toolName)
+return a:toolName
+endif
+let fullPath=fnamemodify('.', ':p:h')
+while fullPath != fnamemodify('/', ':p:h')
+if filereadable(expand(fullPath . '/node_modules/.bin/' . a:toolName))
+return fullPath . '/node_modules/.bin/' . a:toolName
+endif
+let fullPath = fnamemodify(fullPath . '/../', ':p:h')
+endwhile
+return s:defaultNodeModules . a:toolName
+endfunction
